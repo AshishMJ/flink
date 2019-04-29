@@ -6,6 +6,7 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 
+import java.util.HashMap;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -50,9 +51,13 @@ public class ProducerUtility {
     public static void main(String args[]) {
         ProducerUtility util = new ProducerUtility();
 
-        MessageLog<String> messageLog = new MessageLog<>(MessageLog.EventType.FOCI_TO_MCSE_REQUEST, "2");
+        MessageLog<String> messageLog = new MessageLog<>(MessageLog.EventType.FOCI_TO_MCSE_REQUEST, "123");
         messageLog.getHeader().setCreatedBy("inbound-engine");
         messageLog.setPayload("{\"orderId\":\"2\"}");
+        messageLog.setAdditionalAttributes(new HashMap<String, Object>() {{
+            put("fulfillmentOption2", "ELECTRONIC");
+            put("shipmentMethod1", "ELECTRONIC_DELIVERY");
+        }});
 
         try {
             String event = new ObjectMapper().writeValueAsString(messageLog);

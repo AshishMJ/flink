@@ -1,9 +1,11 @@
 package com.ashish.flink.kafka;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.UUID;
 
-public class MessageLog<T> {
+public class MessageLog<T> implements Serializable {
+
     private static final String FOCI = "FOCI";
 
     private static final long serialVersionUID = 1L;
@@ -12,7 +14,7 @@ public class MessageLog<T> {
 
     private T payload;
 
-    private Map<String, Object> extraData;
+    private Map<String, Object> additionalAttributes;
 
     public MessageLog(EventType eventType, String orderId) {
         this.header = new MessageLog.Header();
@@ -43,19 +45,20 @@ public class MessageLog<T> {
         this.payload = payload;
     }
 
-    public Map<String, Object> getExtraData() {
-        return extraData;
+    public Map<String, Object> getAdditionalAttributes() {
+        return additionalAttributes;
     }
 
-    public void setExtraData(Map<String, Object> extraData) {
-        this.extraData = extraData;
+    public void setAdditionalAttributes(Map<String, Object> additionalAttributes) {
+        this.additionalAttributes = additionalAttributes;
     }
 
     @Override
     public String toString() {
-        return "FMSOutboundMessage{" +
+        return "MessageLog{" +
                 "header=" + header +
                 ", payload=" + payload +
+                ", additionalAttributes=" + additionalAttributes +
                 '}';
     }
 
@@ -143,7 +146,12 @@ public class MessageLog<T> {
     public enum EventType{
         OMS_TO_FOCI_REQUEST,
         FOCI_TO_MCSE_REQUEST,
-        FOCI_TO_MCSE_REQUEST_RESERVATION,
+        FOCI_TO_IMS_RESERVATION_REQUEST,
+        MCSE_TO_FOCI_RESPONSE,
+        IMS_TO_FOCI_RESERVATION_RESPONSE,
+        OMS_TO_FOCI_CANCEL_REQUEST,
+        FOCI_TO_IMS_CANCEL_REQUEST,
+        FOCI_TO_OMS_BACKORDER_STATUS,
         FOCI_TO_FMS_SOURCING_RESPONSE;
     }
 }
